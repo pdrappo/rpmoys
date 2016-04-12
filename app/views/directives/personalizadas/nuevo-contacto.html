@@ -1,0 +1,54 @@
+<!-- Agregar Contacto Modal -->
+<form role="form" name="AgregarContacto" ng-submit="addContacto()">
+  <div modal-show class="modal fade" modal-visible="addContactoModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Agregar Contacto</h4>
+        </div>
+        <div class="modal-body">
+
+          <div class="row">
+            <div class="col-md-12">
+              <label for="nombre">Nombre</label>
+              <input type="text" class="form-control" placeholder="Nombre" ng-model="contacto.nombre">
+            </div>
+          </div>
+
+          <div class="row" ng-repeat="prop in contacto.datos">
+            <div class="col-md-4">
+              <label for="propiedad">Propiedad</label>
+              <select class="form-control" ng-model="contacto.datos[$index].propiedad">
+                <option value="5">Teléfono</option>
+                <option value="6">Celular</option>
+                <option value="7">Email</option>
+              </select>
+            </div>
+
+            <div class="col-md-8">
+              <label for="propiedad">Valor</label>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Valor" ng-model="contacto.datos[$index].valor" required>
+                <span class="input-group-btn" ng-if="$index == 0">
+                  <button type="button" class="btn btn-success" type="button" ng-click="addProperty()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                </span>
+
+                <span class="input-group-btn"  ng-if="$index > 0">
+                  <button type="button" class="btn btn-danger" type="button" ng-click="removeProperty($index)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                </span>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="AgregarContacto.$invalid">Agregar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

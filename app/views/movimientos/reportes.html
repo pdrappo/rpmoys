@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">Reporte</div>
+
+      <!-- Table -->
+      <table class="table">
+        <thead>
+          <tr><th>Factura</th><th>Remito</th><th>Referencia</th><th>Comisiones</th></tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="movimiento in reporte">
+            <td>{{movimiento.factura}}</td>
+            <td>{{movimiento.remito}}</td>
+            <td>{{movimiento.referencia}}</td>
+            <td>{{getComision($index)}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-md-6">
+
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">Resumen</div>
+      <div class="panel-body">
+        Total de comisiones: $ {{comisiones}}
+      </div>
+    </div>
+  </div>
+</div>

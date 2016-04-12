@@ -1,0 +1,56 @@
+<!-- Agregar Contacto Modal -->
+<form role="form" name="AgregarTransporte" ng-submit="addTransporte()">
+  <div modal-show class="modal fade" modal-visible="addTransporteModal">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Agregar Transporte</h4>
+        </div>
+        <div class="modal-body">
+
+            <label class="control-label" for="textinput">Nombre</label>
+            <input type="text" name="nombre" placeholder="Nombre del transporte" class="form-control" ng-model="transporte.nombre" required ng-maxlength="120" ng-minlength="3" autocomplete="off" />
+            <div ng-messages="AgregarTransporte.nombre.$error" style="color:red" role="alert" ng-if="AgregarTransporte.nombre.$dirty">
+              <div ng-message="required" ng-hide="AgregarTransporte.$dirty">Este campo es obligatorio</div>
+              <div ng-message="minlength">El texto es muy corto</div>
+              <div ng-message="maxlength">El texto es muy largo</div>
+            </div>
+
+
+            <label class="control-label" for="textinput">Dirección</label>
+            <div class="input-group">
+              <input type="text" name="direccion" placeholder="Dirección" class="form-control" ng-model="transporte.direccion" required ng-maxlength="120" ng-minlength="3" autocomplete="off" />
+            <div ng-messages="AgregarTransporte.direccion.$error" style="color:red" role="alert" ng-if="AgregarTransporte.direccion.$dirty">
+              <div ng-message="required" ng-hide="AgregarTransporte.$dirty">Este campo es obligatorio</div>
+              <div ng-message="minlength">El texto es muy corto</div>
+              <div ng-message="maxlength">El texto es muy largo</div>
+            </div>
+              <span class="input-group-addon">Rosario</span>
+              <input type="hidden" ng-model="transporte.localidad" ng-init="transporte.localidad = '21537'" />
+            </div>
+
+            
+
+            <label class="control-label" for="textinput">Teléfono</label>
+            <input type="text" name="telefono" placeholder="Teléfono" class="form-control" ng-model="transporte.telefono" ng-maxlength="20" ng-minlength="3" autocomplete="off" />
+              <div ng-messages="AgregarTransporte.telefono.$error" style="color:red" role="alert" ng-if="AgregarTransporte.nombre.$dirty">
+                <div ng-message="required" ng-hide="AgregarTransporte.$dirty">Este campo es obligatorio</div>
+                <div ng-message="minlength">El texto es muy corto</div>
+                <div ng-message="maxlength">El texto es muy largo</div>
+              </div>
+
+            <label class="control-label" for="textinput">Observaciones</label>
+            <textarea class="form-control" ng-model="transporte.observaciones"></textarea>
+            <br>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-success" ng-disabled="AgregarTransporte.$invalid">Agregar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

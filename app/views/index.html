@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html ng-app="cpanel" ng-controller="MainController">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ordenes - IEA</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/angular-material.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div id="alertas" ng-class="ng-hide">
+        <alert-content></alert-content>
+    </div>
+
+  <div class="container">
+    <!--
+      <div class="preloader-container" ng-if="preloader">
+        <div class="preloader"><img src="img/preload.gif" /></div>
+      </div>
+
+    -->
+
+      <my-nav-bar ng-if="userData != null"></my-nav-bar>
+      <div ng-view=""></div>
+      
+  </div>
+
+    <!-- Librerias -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/underscore-min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-route.min.js"></script>
+    <script src="js/angular-messages.min.js"></script>
+    <script src="js/angular-animate.min.js"></script>
+    <script src="js/angular-aria.min.js"></script>
+    <script src="js/angular-cookies.min.js"></script>
+    <script src="js/angular-material.min.js"></script>
+    
+    
+    
+    <!-- Directivas Externas -->
+    <script src="js/directivas/ui-bootstrap-tpls-0.14.3.min.js"></script>
+
+    <!--Iniciadores -->
+    <script src="js/app.js"></script>
+    <script src="js/common/rutas.js"></script>
+    <script src="js/common/run.js"></script>
+
+    <!-- Filtros -->
+    <script src="js/filtros/date-filter.js"></script>
+    <script src="js/filtros/carrie-return-filter.js"></script>
+
+    <!-- Directivas Personalizadas -->
+    <script src="js/directivas/personalizadas/my-nav-bar.js"></script>
+    <script src="js/directivas/personalizadas/alert-content.js"></script>
+    <script src="js/directivas/personalizadas/modal-form.js"></script>
+    <script src="js/directivas/personalizadas/nuevo-contacto.js"></script>
+    <script src="js/directivas/personalizadas/nuevo-transporte.js"></script>
+    <script src="js/directivas/personalizadas/nueva-cuenta.js"></script>
+    <script src="js/directivas/personalizadas/cliente-search-bar.js"></script>
+
+    <!-- Servicios -->
+    <script src="js/servicios/auth-service.js"></script>
+    <script src="js/servicios/noty.js"></script>
+
+    <!-- Auth -->
+    <script src="js/controladores/auth.js"></script>
+
+    <!-- Clientes -->
+    <script src="js/controladores/clientes/clientes.js"></script>
+    <script src="js/controladores/clientes/cargar-cliente.js"></script>
+    <script src="js/controladores/clientes/ver-cliente.js"></script>
+
+    <!-- Ordenes -->
+    <script src="js/controladores/ordenes/ordenes.js"></script>
+    <script src="js/controladores/ordenes/cargar-orden.js"></script>
+    <script src="js/controladores/ordenes/ver-orden.js"></script>
+    <script src="js/controladores/ordenes/editar-orden.js"></script>
+
+    <!-- Movimientos -->
+    <script src="js/controladores/movimientos/movimientos.js"></script>
+    <script src="js/controladores/movimientos/reportes.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        $('[data-toggle="popover"]').popover();
+    });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,20 @@
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Tus Clientes</div>
+  <div class="panel-body">
+    <p>
+        <cliente-search-bar></cliente-search-bar>
+    </p>
+  </div>
+
+  <!-- Table -->
+  <table class="table">
+    <thead>
+      <tr><th>#</th><th>Nombre</th><th>DOC</th><th>Dirección</th></tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="cliente in clientes" style="font-size: 11px;"><td>{{cliente.pid}}</td><td><a ng-href="#/clientes/ver/{{cliente.pid}}">{{cliente.nombre}}</a></td><td>{{cliente.doc_num}}</td><td>{{cliente.calle}} {{cliente.numero}}, ({{cliente.cp}}) {{cliente.localidad}}</td></tr>
+      <tr ng-hide="alertaTxt == null"><td colspan="5">{{alertaTxt}}</td></tr>
+    </tbody>
+  </table>
+</div>

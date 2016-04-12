@@ -1,0 +1,146 @@
+
+<div class="row" ng-hide="ready" class="ng-hide">
+  <div class="col-md-12"><p>Aguarde mientras se cargan los datos</p></div>
+</div>
+
+<form role="form" name="CargarOrdenForm" ng-submit="SubmitForm()" class="ng-hide" ng-hide="!ready">
+<div class="row">
+  <div class="col-sm-4">
+
+    <div class="panel panel-default">
+      <div class="panel-heading">Cliente N°: <strong>{{persona.id}}</strong></div>
+      <div class="panel-body">
+          <h5><a ng-href="#/clientes/ver/{{persona.id}}">{{persona.nombre}}</a></h5>
+          <strong>{{persona.tipo_doc_text}}:</strong> {{persona.doc_num}}<br>
+          <strong>Dirección:</strong> {{persona.calle}} {{persona.numero}}<br>
+          <strong>Localidad:</strong> ({{persona.zipcode}}) {{persona.provincia_id == 20 ? 'CAPITAL FEDERAL' : persona.localidad_nombre}}<br>
+          <strong>IVA:</strong> {{persona.dato_impositivo_text}}<br>
+          <strong>Cond. Comercial:</strong> {{persona.forma_pago_text}}<br>
+          <strong>Bonificaciones:</strong> {{persona.bonificacion_text}}<br>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">Cargar Orden</div>
+      <div class="panel-body">
+
+        <div class="form-group">
+            <label class="control-label" for="textinput">OC/NP</label>
+             <input type="text" placeholder="Referencia" class="form-control" ng-model="orden.referencia" autocomplete="off">
+          </div>
+
+        <div class="form-group">
+        <label class="control-label" for="textinput">Usuario ML</label>
+        <div class="input-group">
+          <span class="input-group-addon"><input type="checkbox" ng-model="checked"></span>
+          <input type="text" placeholder="Usuario ML" class="form-control" ng-model="orden.usuario_ml" autocomplete="off" ng-disabled="!checked">
+        </div>
+        </div>
+
+          <div class="form-group">
+            <label class="control-label" for="textinput">Forma de pago</label>
+            <select class="form-control" name="forma_pago" ng-model="orden.fp" ng-options="item as item.descripcion for item in formas_pago track by item.id">
+              </select>
+              <div ng-messages="{NoFp:orden.fp == null}" style="color:red" role="alert">
+                <div ng-message="NoFp">Debe seleccionar una opción</div>
+              </div>
+          </div>
+
+          <div class="form-group">
+          <label class="control-label" for="textinput">Descuento</label>
+              <select class="form-control" name="bonificacion" ng-model="orden.boni" ng-options="item as item.descripcion for item in bonificaciones track by item.id" >
+              </select>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label" for="textinput">Contacto</label>
+              <input type="text" placeholder="Contacto" class="form-control" ng-model="orden.contacto" autocomplete="off">
+          </div>
+
+           <!-- Text input-->
+          <div class="form-group">
+            <label class="control-label" for="textinput">Entrega</label>
+              <select class="form-control" name="transporte" ng-model="orden.entrega" ng-options="item as item.nombre for item in transportes track by item.id">
+              </select>
+          </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">Detalle de la Orden <div class="pull-right">
+            <button type="button" class="btn btn-warning" ng-click="addItem()">Agregar Item</button>
+          </div></div>
+      <div class="panel-body">
+        <table class="table">
+        <thead>
+          <tr><th>Cantidad</th><th>Descripción</th><th>P. Unit.</th><th>Moneda</th><th>&nbsp;</th></tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in orden.items track by $index">
+            <td>{{item.cantidad}}</td>
+            <td>{{item.descripcion}}</td>
+            <td>{{item.importe}}</td>
+            <td>{{item.moneda.text}}</td>
+            <td><button type="button" class="btn btn-danger btn-xs" title="{{item.descripcion}}" ng-click="QuitarArticulo($index)"><span class="glyphicon glyphicon-trash" aria-hidden="true" ></span> Eliminar</button></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <!-- Table -->
+      
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">Observaciones</strong></div>
+      <div class="panel-body">
+          <textarea class="form-control" rows="2" ng-model="orden.observaciones">{{orden.observaciones}}</textarea>
+      </div>
+    </div>
+
+      <div class="form-group">
+          <div class="pull-right">
+            <button type="submit" class="btn btn-primary" ng-disabled="CargarClienteForm.$invalid || orden.items.length < 1 ">Guardar Orden</button>
+          </div>
+      </div>
+</div>
+</form>
+
+
+<form role="form" name="CargarItem" ng-submit="AgregarArticulo()">
+  <div modal-show class="modal fade" modal-visible="showDialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Agregar Items</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+            <thead>
+              <tr><th>Cant.</th><th>Descripción</th><th>P. Unit.</th><th>Moneda</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td width="10%"><input type="number" min="1" step="1" placeholder="Cant." class="form-control" ng-model="item.cantidad" autocomplete="off" required ng-minlength="1"></td>
+                <td width="45%"><input type="text" placeholder="Descripcion" class="form-control" ng-model="item.descripcion" autocomplete="off" required></td>
+                <td width="15%"><input type="number" step="any" placeholder="Precio" class="form-control" ng-model="item.importe" autocomplete="off" required></td>
+                <td width="20%"><select class="form-control" name="moneda" ng-model="item.moneda" ng-options="item as item.text for item in monedas track by item.id">
+                  </select></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="CargarItem.$invalid">Agregar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+      

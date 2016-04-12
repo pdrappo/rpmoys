@@ -1,0 +1,32 @@
+<div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">Ordenes Pendientes ({{ordenes.length}})</div>
+
+      <!-- Table -->
+      <table class="table">
+        <thead>
+          <tr><th>Num.</th><th>Cliente</th><th>Dirección</th><th>Referencia</th><th>Fecha</th><th><span class="glyphicon glyphicon-print" aria-hidden="true"></span></th></tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="orden in ordenes | filter:query" ng-hide="ordenes.length < 1" style="font-size: 11px;">
+            <td><a ng-href="#/ordenes/ver/{{orden.id}}">{{orden.id}}</a></td>
+            <td><a ng-href="#/clientes/ver/{{orden.persona_id}}">{{orden.persona_nombre}}</a></td>
+            <td>{{returnOrdenAddress(orden.id)}}</td>
+            <td>{{orden.referencia}}</td>
+            <td>{{orden.creado | datefilter:'dd/MM/yyyy' }}</td>
+            <td>{{orden.impresiones}}</td>
+            <!--
+            <td>
+                <div class="btn-group pull-right" role="group" aria-label="acciones">
+                  <a class="btn btn-info btn-xs" title="Ver" ng-href="#/ordenes/ver/{{orden.id}}"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a>
+                  <a class="btn btn-primary btn-xs" title="Imprimir" ng-href="server/print/orden/{{cpUserData.access_token}}/{{orden.id}}" target="_blank"><span class="glyphicon glyphicon-print" aria-hidden="true"></span></a>
+                  <a class="btn btn-danger btn-xs" title="Eliminar" ng-click="setOrdenDelete(orden.id, $index)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                </div>
+            </td>
+            -->
+          </tr>
+
+          <tr ng-hide="alertaTxt == null"><td colspan="5">{{alertaTxt}}</td></tr>
+        </tbody>
+      </table>
+    </div>

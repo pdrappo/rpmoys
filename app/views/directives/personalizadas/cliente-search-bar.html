@@ -1,0 +1,7 @@
+<div class="form-group">
+  <label class="sr-only" for="buscar">Buscar</label>
+  <div class="input-group">
+    <div class="input-group-addon"><span class="glyphicon glyphicon-search" ng-class="{'hide': buscando}" aria-hidden="true"></span> <img src="img/ajax-loader-3.gif" style="height:16px;" ng-class="{'hide': !buscando}" /></div>
+    <input type="text" class="form-control" placeholder="Buscar clientes por nombre o documento" ng-model="searchBox" name="search" ng-keyup="SearchCambio()" ng-class="{'loading-img': buscando}" />
+  </div>
+</div>

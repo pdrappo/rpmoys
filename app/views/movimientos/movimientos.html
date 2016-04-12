@@ -1,0 +1,48 @@
+<div class="row">
+  <div class="col-md-8">
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">Movimientos</div>
+      <div class="panel-body">
+	    Total a transferir: $ {{total}}
+	    <button class="btn btn-primary btn-sm" ng-disabled="total <= 0" ng-click="transferir()">Transferir</button>
+	  </div>
+
+      <!-- Table -->
+      <table class="table">
+        <thead>
+          <tr><th><input type="checkbox" ng-model="selectedAll" ng-click="checkAll()" /></th><th>Num.</th><th>Cliente</th><th>Referencia</th><th>Importe</th></tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="movimiento in movimientos">
+          	<td><input type="checkbox" ng-model="movimiento.Selected" ng-click="sumar($index)" /></td>
+            <td><a ng-href="#/ordenes/ver/{{movimiento.orden_id}}">{{movimiento.orden_id}}</a></td>
+            <td><a ng-href="#/clientes/ver/{{movimiento.persona_id}}">{{movimiento.persona_nombre}}</a></td>
+            <td>{{movimiento.referencia}}</td>
+            <td>{{movimiento.importe}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-md-4">
+  	<div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">Transferencias</div>
+
+      <!-- Table -->
+      <table class="table">
+        <thead>
+          <tr><th>Importe</th><th>Fecha</th><th>&nbsp;</th></tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in transferidos">
+            <td>{{item.importe}}</td>
+            <td>{{item.creado}}</td>
+            <td><a ng-href="#/movimientos/reporte/{{item.id}}"><span class="glyphicon glyphicon-file" title="Reporte" aria-hidden="true"></span></a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

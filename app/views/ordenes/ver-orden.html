@@ -1,0 +1,223 @@
+
+<div class="row" ng-hide="ready" class="ng-hide">
+  <div class="col-md-12"><p>Aguarde mientras se cargan los datos</p></div>
+</div>
+
+<div class="row" ng-hide="!ready" class="ng-hide">
+  <div class="col-sm-4">
+
+      <uib-accordion close-others="oneAtATime">
+        <uib-accordion-group heading="Datos del Cliente" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+          <strong>Cliente: </strong><a ng-href="#/clientes/ver/{{persona.id}}">{{persona.nombre}}</a><br>
+          <strong>{{persona.tipo_doc_text}}:</strong> {{persona.doc_num}}<br>
+          <strong>Dirección:</strong> {{cuenta.calle}} {{cuenta.numero}}<br>
+          <strong>Localidad:</strong> ({{cuenta.zipcode}}) {{cuenta.localidad_nombre}}<br>
+          <strong>IVA:</strong> {{persona.dato_impositivo_text}}<br>
+          <strong>Cond. Comercial:</strong> {{orden.forma_pago_text}}<br>
+          <strong>Bonificaciones:</strong> {{orden.bonificacion_text}}<br>
+          <strong>Entrega:</strong> {{orden.entrega_text}}<br>
+          <strong>OC/NP:</strong> {{orden.referencia}}<br>
+          <div ng-if="orden.usuario_ml != null">
+            <strong>Usuario ML:</strong> {{orden.usuario_ml}}<br>
+          </div>
+          <div ng-if="orden.observaciones != ''">
+            <hr/>
+            <strong>Observaciones:</strong><p ng-bind-html="orden.observaciones | crTobr"></p><br>
+          </div>
+        </uib-accodion-group>
+      </uib-accordion>
+      <div class="pull-right">
+        <button type="button" class="btn btn-info" ng-click="SetRemitoModal()" title="N° Remito / Factura">
+          <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+        </button>
+
+        <button type="button" ng-hide="orden.finalizado != null" class="btn btn-warning" ng-click="finalizarOrden()" title="Finalizar Orden">
+          <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+        </button>
+
+        <a ng-href="server/print/orden/{{cpUserData.access_token}}/{{orden.id}}" target="_blank" class="btn btn-primary" title="Imprimir Orden"><span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+        </a>
+        <button type="button" class="btn btn-danger" ng-click="EliminarOrdenModal()" title="Eliminar Orden">
+          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+        </button>
+      </div>
+  </div>
+
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">Orden N°: {{orden.id}} del {{orden.creado | datefilter:'dd/MM/yyyy'}}</div>
+
+      <!-- Table -->
+      <table class="table">
+        <thead>
+          <tr><th>Cantidad</th><th>Descripcion</th><th>Importe</th><th>Moneda</th></tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in orden.items">
+            <td> {{item.cantidad}}</td>
+            <td>{{item.descripcion}}</td>
+            <td>{{item.importe}}</td>
+            <td>{{returnMoneda(item.moneda)}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+        <hr/>
+
+
+  <div class="row">
+    <div class="col-md-6">
+      <button type="button" class="btn btn-primary" ng-click="SetIntervencionModal()">
+        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Nuevo comentario
+      </button>
+
+      <hr/>
+      <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Comentarios</div>
+        <div class="panel-body" ng-hide="intervenciones.length > 0">
+          <p>La orden no tiene comentarios</p>
+        </div>
+
+        <!-- Table -->
+        <table class="table" ng-hide="intervenciones.length < 1">
+            <tbody>
+              <tr ng-repeat="item in intervenciones">
+                <td>
+                  <p ng-bind-html="item.detalle | crTobr"></p>
+                  <span class="pull-right"><small><strong>{{item.usuario}}</strong> el {{item.creado | datefilter:'dd-MM-yyyy'}}</small><span></td>
+                <td><button type="button" class="close" aria-label="Close" ng-click="eliminarIntervencion(item.id)" ng-if="item.usuario_id == cpUserData.id"><span aria-hidden="true">&times;</span></button></td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+    </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-warning" ng-click="SetTransacModal()">
+          <span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Nueva transacción
+        </button>
+        <hr/>
+        <div class="panel panel-default">
+          <!-- Default panel contents -->
+          <div class="panel-heading">Transacciones</div>
+          <div class="panel-body" ng-hide="transacciones.length > 0">
+            <p>La orden no tiene transacciones</p>
+          </div>
+
+          <!-- Table -->
+          <table class="table" ng-hide="transacciones.length < 1">
+             <thead>
+                <tr><th>Detalle</th><th>Importe</th></tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="item in transacciones">
+                  <td><span title="{{item.creado | datefilter:'dd-MM-yyyy'}}">{{item.detalle}}</span></td>
+                  <td>{{item.importe}}</td>
+                </tr>
+              </tbody>
+          </table>
+        </div>
+
+      </div>
+  </div>
+
+  </div>
+</div>
+
+<div modal-show class="modal fade" modal-visible="EliminarOrdenConfirmacion">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Advertencia</h4>
+      </div>
+      <div class="modal-body">
+        <p class="text-danger">¿Está seguro que desea eliminar esta orden?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" ng-click="eliminarOrden()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form name="guardarIntervencionForm" ng-submit="guardarIntervencion()">
+  <div modal-show class="modal fade" modal-visible="IntervencionFormModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Nueva intervención</h4>
+        </div>
+        <div class="modal-body">
+           <textarea class="form-control" rows="2" ng-model="intervencionText" required ng-maxlength="120" ng-minlength="3"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="guardarIntervencionForm.$invalid">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<form name="editDocForm" ng-submit="editarDoc()">
+  <div modal-show class="modal fade" modal-visible="editDocFormModal">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Editar documentación</h4>
+        </div>
+        <div class="modal-body">
+          <label for="propiedad">Remito</label>
+          <div class="input-group">
+            <span class="input-group-addon">N°</span>
+            <input type="text" class="form-control" placeholder="Remito N°" ng-model="orden.remito" autocomplete="off" required>
+          </div>
+
+          <label for="propiedad">Factura</label>
+          <div class="input-group">
+            <span class="input-group-addon">N°</span>
+            <input type="text" class="form-control" placeholder="Factura N°" ng-model="orden.factura" autocomplete="off" required>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="editDocForm.$invalid">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<form name="transacForm" ng-submit="transaccionForm()">
+  <div modal-show class="modal fade" modal-visible="transacModal">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Transacciones</h4>
+        </div>
+        <div class="modal-body">
+          <label for="propiedad">Importe</label>
+          <div class="input-group" ng-class="{'has-error' : transacForm.importe.$invalid && transacForm.importe.$dirty}">
+            <span class="input-group-addon">$</span>
+            <input type="number" step="any" name="importe" class="form-control" placeholder="Importe" autocomplete="off" ng-model="transaccion.importe" required  >
+          </div>
+
+          <label for="propiedad">Referencia</label>
+          <input type="text" class="form-control" placeholder="Referencia" ng-model="transaccion.referencia" autocomplete="off" required>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="transacForm.$invalid">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
